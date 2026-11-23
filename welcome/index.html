@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>欢迎光临</title>
+<style>
+  :root {
+    --bg1: #fff4e6;
+    --bg2: #ffe3d3;
+    --ink: #3a2a20;
+    --accent: #ff7a45;
+    --accent2: #ffb347;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    color: var(--ink);
+    background: radial-gradient(circle at 20% 20%, var(--bg1), var(--bg2) 70%);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .blob {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: .55;
+    animation: float 14s ease-in-out infinite;
+    z-index: 0;
+  }
+  .b1 { width: 420px; height: 420px; background: #ffc59e; top: -120px; left: -100px; }
+  .b2 { width: 360px; height: 360px; background: #ffd98a; bottom: -120px; right: -80px; animation-delay: -5s; }
+  .b3 { width: 260px; height: 260px; background: #ffb0a0; top: 55%; left: 60%; animation-delay: -9s; }
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(40px, -30px) scale(1.08); }
+  }
+
+  .card {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 64px 56px 52px;
+    max-width: 640px;
+    width: calc(100% - 40px);
+    background: rgba(255, 255, 255, .55);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 255, 255, .8);
+    border-radius: 32px;
+    box-shadow: 0 30px 80px rgba(160, 80, 30, .15);
+    animation: rise .9s cubic-bezier(.2, .8, .2, 1) both;
+  }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(30px) scale(.97); }
+    to { opacity: 1; transform: none; }
+  }
+
+  .wave {
+    font-size: 64px;
+    display: inline-block;
+    transform-origin: 70% 70%;
+    animation: wave 2.4s ease-in-out infinite;
+  }
+  @keyframes wave {
+    0%, 60%, 100% { transform: rotate(0); }
+    10%, 30% { transform: rotate(16deg); }
+    20%, 40% { transform: rotate(-8deg); }
+  }
+
+  h1 {
+    margin-top: 18px;
+    font-size: clamp(44px, 9vw, 76px);
+    letter-spacing: .12em;
+    font-weight: 800;
+    background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent));
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shine 5s linear infinite;
+  }
+  @keyframes shine { to { background-position: 200% center; } }
+
+  .en {
+    margin-top: 6px;
+    font-size: 14px;
+    letter-spacing: .5em;
+    text-transform: uppercase;
+    opacity: .55;
+  }
+  .msg {
+    margin: 28px auto 0;
+    font-size: 17px;
+    line-height: 1.9;
+    max-width: 420px;
+    opacity: .85;
+  }
+  .time {
+    margin-top: 26px;
+    font-size: 14px;
+    opacity: .6;
+  }
+  .btn {
+    margin-top: 30px;
+    display: inline-block;
+    padding: 14px 34px;
+    border: none;
+    border-radius: 999px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    box-shadow: 0 10px 24px rgba(255, 122, 69, .35);
+    cursor: pointer;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(255, 122, 69, .45); }
+  .btn:active { transform: scale(.97); }
+
+  .confetti {
+    position: fixed;
+    top: -20px;
+    width: 10px;
+    height: 14px;
+    border-radius: 3px;
+    z-index: 2;
+    pointer-events: none;
+    animation: fall linear forwards;
+  }
+  @keyframes fall {
+    to { transform: translateY(110vh) rotate(720deg); opacity: .9; }
+  }
+</style>
+</head>
+<body>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+
+  <main class="card">
+    <div class="wave">👋</div>
+    <h1>欢迎光临</h1>
+    <div class="en">Welcome</div>
+    <p class="msg">很高兴你来了。<br>泡杯茶，随便看看，<br>这里的灯一直为你亮着。</p>
+    <div class="time" id="time"></div>
+    <button class="btn" id="hi">打个招呼 🎉</button>
+  </main>
+
+<script>
+  const timeEl = document.getElementById('time');
+  function greet() {
+    const now = new Date();
+    const h = now.getHours();
+    const part = h < 5 ? '夜深了' : h < 11 ? '早上好' : h < 13 ? '中午好' : h < 18 ? '下午好' : '晚上好';
+    const pad = n => String(n).padStart(2, '0');
+    timeEl.textContent = `${part} · ${now.getMonth() + 1} 月 ${now.getDate()} 日 ${pad(h)}:${pad(now.getMinutes())}`;
+  }
+  greet();
+  setInterval(greet, 30000);
+
+  const colors = ['#ff7a45', '#ffb347', '#ffd166', '#ff9a8b', '#7bdcb5', '#8ecae6'];
+  function burst(n = 80) {
+    for (let i = 0; i < n; i++) {
+      const c = document.createElement('div');
+      c.className = 'confetti';
+      c.style.left = Math.random() * 100 + 'vw';
+      c.style.background = colors[i % colors.length];
+      c.style.animationDuration = 2.5 + Math.random() * 2.5 + 's';
+      c.style.animationDelay = Math.random() * .6 + 's';
+      c.style.transform = `rotate(${Math.random() * 360}deg)`;
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 6000);
+    }
+  }
+  window.addEventListener('load', () => setTimeout(() => burst(60), 500));
+  document.getElementById('hi').addEventListener('click', () => burst(100));
+</script>
+</body>
+</html>
